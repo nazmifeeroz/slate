@@ -1,239 +1,193 @@
 ---
-title: API Reference
+title: Loyalty Pass API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
-  - javascript
+  - php
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
+  - <a href='http://www.alpome.com'>A Product of Alpome Pte Ltd</a>
+  # - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
-includes:
-  - errors
+# includes:
+#   - errors
 
 search: true
 ---
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the Loyalty Pass API! You can use our API to access SkiesPass API endpoints, which can store and create individual Loyalty Pass in our database. The pass can then be updated with its own endpoints.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+This API code will be used in JSON format.
 
 # Authentication
 
-> To authorize, use this code:
+> To authorize:
 
-```ruby
-require 'kittn'
+```php
+<?php
+use GuzzleHttp\Client;
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+$client = new Client;
+
+$client->request('POST', 'https://skiespass.com/api/loyalty', [
+    'headers'       => [
+        'Authorization' => <api_key>,
+    ]
+]);
+?>
 ```
 
-```python
-import kittn
+> Make sure to replace `<api_key>` with your API key.
 
-api = kittn.authorize('meowmeowmeow')
-```
+SkiesPass uses API keys to allow access to the API. Please contact our Web Team to retrieve an API key.
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
+SkiesPass expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-```javascript
-const kittn = require('kittn');
+`POST https://skiespass.com/api/loyalty`
 
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`Authorization: <api_key>`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+ Make sure to replace <code><api_key></code> with your API key.
 </aside>
 
-# Kittens
+# Loyalty Pass
 
-## Get All Kittens
+## Creating a pass
 
-```ruby
-require 'kittn'
+> The request should have a body like this:
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+```php
+<?php
+$client->request('POST', 'https://skiespass.com/api/loyalty/', [
+  'json'    => [
+    "template_id"         => "1",
+    "name"                => "Guest Name",
+    "company_name"        => "Company Co.",
+    "membership_level"    => "VIP",
+    "membership_number"   => "DODER23W1",
+    "points_accumulated"  => "30",
+    "points_balance"      => "1250"
+  ]
+]);
+?>
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "template_id": "1",
+  "name": "Guest Name",
+  "company_name": "Company Co.",
+  "membership_level": "VIP",
+  "membership_number": "DODER23W1",
+  "points_accumulated": "30",
+  "points_balance": "1250"
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
+> Errors if pass creation is not succesful.
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+  "success": false,
+  "error": "API key is not authorized."
+}
+
+{
+  "success": false,
+  "error": "Template ID is invalid."
+}
+
+{
+  "success": false,
+  "error": "Duplicate pass detected."
 }
 ```
 
-This endpoint deletes a specific kitten.
+In the HTTP request body, a json is expected when creating a pass.
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`POST https://skiespass.com/api/loyalty/`
 
-### URL Parameters
+### JSON Body Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the kitten to delete
+template_id | This will be the ID of the template for the pass. It can be found in the template dashboard.
+name | Name of member.
+company_name | Merchant's company name.
+membership_level | This will reflect the membership level of the member from the CRM.
+membership_number | Member's number.
+points_accumulated | Points that are accumulated from the recent transaction.
+points_balanced | Member's points balance.
+
+<aside class="warning">
+<strong>WARNING</strong> — the <code>template_id</code> must belong to the <code><api_key></code> provided in the header.
+</aside>
+
+## Download Pass
+
+> If pass is created successfully, a json response with a `pass_url` will be returned.
+
+```json
+{
+  "success": true,
+  "pass_url": "https://skiespass.com/loyalty/hgefjbefolgq3284gjbers83"
+}
+```
+
+Once the pass details are sent and successfully saved in the database, a `url` will be returned where the pass can be downloaded.
+
+### Json Response Parameters
+
+Parameter | Description
+--------- | -----------
+Success | `true/false` specifies if the pass were successfully created.
+error | Describes the error.
+pass_url | the `url` to download the pass.
+
+## Updating a pass
+
+> To update a pass:
+
+```php
+<?php
+$client->request('PUT', 'https://skiespass.com/api/loyalty/update', [
+  'json'    => [
+    "membership_number"   => "DODER23W1",
+    "points_accumulated"  => "30",
+    "points_balance"      => "1250"
+  ]
+]);
+?>
+```
+
+> If pass is updated successfully.
+
+```json
+{
+  "success": true,
+}
+```
+
+This endpoint updates the pass.
+
+### HTTP Request
+
+`PUT https://skiespass.com/api/loyalty/update`
+
+### HTTP Headers
+
+`Authorization: <api_key>`
+
+### JSON Body Parameters
+
+Parameter | Description
+--------- | -----------
+membership_number | this will validate with the `<api_key>` to match the pass stored
+
 
